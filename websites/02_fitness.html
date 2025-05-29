@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Login to Dashboard</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #0f172a;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 400px;
+      background: #1e293b;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px #0006;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      background: #10b981;
+      border: none;
+      color: white;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    #dashboard {
+      display: none;
+      text-align: center;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .progress-section {
+      position: relative;
+      width: 120px;
+      height: 120px;
+      margin: 20px auto;
+    }
+
+    svg {
+      transform: rotate(-90deg);
+    }
+
+    .bg {
+      fill: none;
+      stroke: #334155;
+      stroke-width: 10;
+    }
+
+    .progress {
+      fill: none;
+      stroke: #38bdf8;
+      stroke-width: 10;
+      stroke-linecap: round;
+      stroke-dasharray: 314;
+      stroke-dashoffset: 314;
+      animation: fillProgress 2s forwards ease-out;
+    }
+
+    @keyframes fillProgress {
+      to {
+        stroke-dashoffset: 94;
+      }
+    }
+
+    .step-label {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+    }
+
+    .stats {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+
+    .stat-card {
+      background: #334155;
+      padding: 15px;
+      border-radius: 10px;
+      width: 100px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container" id="login">
+  <h2>Login</h2>
+  <input type="text" id="username" placeholder="Username" />
+  <input type="password" id="password" placeholder="Password" />
+  <button onclick="login()">Log In</button>
+</div>
+
+<div class="container" id="dashboard">
+  <h2>Welcome to Dashboard</h2>
+  <div class="progress-section">
+    <svg width="120" height="120">
+      <circle class="bg" cx="60" cy="60" r="50" />
+      <circle class="progress" cx="60" cy="60" r="50" />
+    </svg>
+    <div class="step-label">
+      <h3 id="stepCount">7800</h3>
+      <p>Steps</p>
+    </div>
+  </div>
+  <div class="stats">
+    <div class="stat-card">
+      <h4>Calories</h4>
+      <p>1800 kcal</p>
+    </div>
+    <div class="stat-card">
+      <h4>Water</h4>
+      <p>2.5 L</p>
+    </div>
+    <div class="stat-card">
+      <h4>Sleep</h4>
+      <p>7.5 hrs</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  function login() {
+    const username = document.getElementById("username").value.trim();
+    const password = document.getElementById("password").value;
+
+    // Demo credentials (hardcoded)
+    if (username === "gym" && password === "gym@*123") {
+      document.getElementById("login").style.display = "none";
+      document.getElementById("dashboard").style.display = "flex";
+    } else {
+      alert("Invalid credentials. Please try again.");
+        document.getElementById("username").value = "";
+    }
+  }
+</script>
+
+</body>
+</html>

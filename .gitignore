@@ -1,0 +1,72 @@
+# Python bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Jupyter notebook checkpoints
+.ipynb_checkpoints/
+
+# Virtual environments
+env/
+venv/
+.venv/
+
+# PyCharm / VSCode settings
+.idea/
+.vscode/
+*.code-workspace
+
+# Environment variables
+.env
+*.env
+
+# Model artifacts
+*.h5
+*.hdf5
+*.ckpt
+*.pb
+*.pth
+*.pt
+*.onnx
+*.tflite
+*.joblib
+*.pkl
+*.sav
+
+# Training logs and outputs
+logs/
+runs/
+output/
+checkpoints/
+weights/
+
+# Large datasets and results (optional)
+data/
+datasets/
+*.csv
+*.tsv
+*.jsonl
+*.zip
+*.tar.gz
+
+# Temporary files
+*.tmp
+*.log
+*.bak
+*.swp
+.DS_Store
+Thumbs.db
+
+# Jupyter Notebook output
+*.nbconvert.ipynb
+
+# MyPy and Pylint
+.mypy_cache/
+.pytype/
+pylint-report.txt
+
+# Cython build
+build/
+dist/
+*.egg-info/
+experiments/

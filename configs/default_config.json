@@ -1,0 +1,18 @@
+{
+  "experiment_name": "ui_action_experiment_1",
+  "data_files": [
+    "login_task_data.json"
+  ],
+  "output_dir": "experiments/exp_1",
+  "batch_size": 8,
+  "num_epochs": 50,
+  "early_stopping_patience": 10,
+  "input_size": [
+    224,
+    224
+  ],
+  "enhance_data": false,
+  "enhancement_factor": 5,
+  "use_wandb": false,
+  "pretrained_path": null
+}

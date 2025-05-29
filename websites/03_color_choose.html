@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Modern Login + Dashboard</title>
+  <style>
+    :root {
+      --bg: #f9fafb;
+      --card: #ffffff;
+      --primary: #6366f1;
+      --secondary: #ec4899;
+      --accent: #10b981;
+      --text: #1f2937;
+      --muted: #9ca3af;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 400px;
+      background: var(--card);
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.08);
+      transition: all 0.3s ease;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      text-align: center;
+      color: var(--primary);
+    }
+
+    input {
+      width: 100%;
+      padding: 14px;
+      margin: 10px 0;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      margin-top: 15px;
+      background: var(--primary);
+      border: none;
+      color: white;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background: #4f46e5;
+    }
+
+    #dashboard {
+      display: none;
+      text-align: center;
+    }
+
+    .stats {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+
+    .stat-card {
+      background: var(--accent);
+      color: white;
+      padding: 20px;
+      border-radius: 12px;
+      width: 130px;
+      margin: 10px 0;
+      box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+    }
+
+    .stat-card h3 {
+      margin: 0;
+      font-size: 24px;
+    }
+
+    .stat-card p {
+      margin: 5px 0 0;
+      font-size: 14px;
+    }
+
+    .welcome {
+      font-size: 18px;
+      color: var(--muted);
+      margin-bottom: 15px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container" id="login">
+  <h2>🌈 Welcome</h2>
+  <input type="text" id="username" placeholder="Username" />
+  <input type="password" id="password" placeholder="Password" />
+  <button onclick="login()">Log In</button>
+</div>
+
+<div class="container" id="dashboard">
+  <h2>📊 Dashboard</h2>
+  <p class="welcome" id="welcomeUser"></p>
+  <div class="stats">
+    <div class="stat-card" style="background: var(--primary)">
+      <h3>7,800</h3>
+      <p>Steps</p>
+    </div>
+    <div class="stat-card" style="background: var(--secondary)">
+      <h3>560</h3>
+      <p>Calories</p>
+    </div>
+    <div class="stat-card" style="background: var(--accent)">
+      <h3>42</h3>
+      <p>Points</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  function login() {
+    const username = document.getElementById('username').value.trim();
+    const pass = document.getElementById('password').value.trim();
+
+    if (username === "color" && pass === "color")  {
+      document.getElementById('login').style.display = 'none';
+      document.getElementById('dashboard').style.display = 'block';
+      document.getElementById('welcomeUser').textContent = `Hello, ${user}!`;
+    } else {
+      alert('Please enter username and password');
+    }
+  }
+</script>
+</body>
+</html>
