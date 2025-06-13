@@ -413,11 +413,21 @@ class UIDataRecorder:
         try:
             # Get key name
             key_name = key.char if hasattr(key, 'char') and key.char else str(key).split('.')[-1]
+            
+            # Normalize modifier key names
+            if key_name in ['ctrl_l', 'ctrl_r']:
+                key_name = 'ctrl'
+            elif key_name in ['shift_l', 'shift_r']:
+                key_name = 'shift'
+            elif key_name in ['alt_l', 'alt_r', 'alt_gr']:
+                key_name = 'alt'
+            elif key_name in ['cmd', 'cmd_l', 'cmd_r']:
+                key_name = 'cmd'
+            
             self.pressed_keys.add(key_name.lower())
             
             # Check for stop recording hotkey (Ctrl+Shift+K)
-            if {'ctrl_l', 'shift', 'k'}.issubset(self.pressed_keys) or \
-               {'ctrl_r', 'shift', 'k'}.issubset(self.pressed_keys):
+            if {'ctrl', 'shift', 'k'}.issubset(self.pressed_keys):
                 print("🚀 Ctrl+Shift+K detected! Stopping recording...")
                 self.pressed_keys.clear()
                 self.root.after(0, self.stop_recording)
@@ -425,17 +435,48 @@ class UIDataRecorder:
             
             current_time = time.time()
             
-            # Handle text input vs single key press
-            if hasattr(key, 'char') and key.char and key.char.isprintable():
-                # Printable character - part of text input
+            # Check if this is a key combination
+            modifiers = {'ctrl', 'shift', 'alt', 'cmd'}
+            active_modifiers = modifiers.intersection(self.pressed_keys)
+            
+            # If we have modifiers and a non-modifier key, it's a combination
+            non_modifier_keys = self.pressed_keys - modifiers
+            
+            if active_modifiers and non_modifier_keys:
+                # This is a key combination - record it
+                self.flush_text_buffer()  # Save any pending text first
+                
+                # Create combination string
+                combination_parts = sorted(list(active_modifiers)) + sorted(list(non_modifier_keys))
+                combination_string = '+'.join(combination_parts)
+                
+                image_files = self.save_screenshots_around_event(current_time)
+                
+                event = ActionEvent(
+                    timestamp=current_time,
+                    timestamp_ms=self.get_timestamp_ms(),
+                    action_type='key_combination',
+                    image_files=image_files,
+                    screen_width=self.screen_width,
+                    screen_height=self.screen_height,
+                    key=combination_string
+                )
+                
+                self.events.append(event)
+                self.update_event_count()
+                
+                print(f"⌨️  Key combination: {combination_string} - {event.timestamp_ms}ms")
+                
+            elif hasattr(key, 'char') and key.char and key.char.isprintable() and not active_modifiers:
+                # Printable character without modifiers - part of text input
                 self.text_buffer += key.char
                 self.last_key_time = current_time
                 
                 # Set timer to process text input after timeout
                 threading.Timer(self.text_timeout, self.process_text_input).start()
                 
-            else:
-                # Single key press (Enter, Escape, etc.)
+            elif not active_modifiers and key_name not in modifiers:
+                # Single key press (Enter, Escape, etc.) without modifiers
                 self.flush_text_buffer()  # Save any pending text first
                 
                 image_files = self.save_screenshots_around_event(current_time)
@@ -464,10 +505,23 @@ class UIDataRecorder:
             return
             
         try:
+            # Get key name
             key_name = key.char if hasattr(key, 'char') and key.char else str(key).split('.')[-1]
+            
+            # Normalize modifier key names (same as in on_key_press)
+            if key_name in ['ctrl_l', 'ctrl_r']:
+                key_name = 'ctrl'
+            elif key_name in ['shift_l', 'shift_r']:
+                key_name = 'shift'
+            elif key_name in ['alt_l', 'alt_r', 'alt_gr']:
+                key_name = 'alt'
+            elif key_name in ['cmd', 'cmd_l', 'cmd_r']:
+                key_name = 'cmd'
+            
             self.pressed_keys.discard(key_name.lower())
-        except:
-            pass
+            
+        except Exception as e:
+            print(f"Keyboard release error: {e}")
     
     def process_text_input(self):
         """Process accumulated text input after timeout"""
@@ -661,6 +715,7 @@ class UIDataRecorder:
         # Count event types
         mouse_clicks = len([e for e in self.events if e.action_type == 'click'])
         key_presses = len([e for e in self.events if e.action_type == 'key_press'])
+        key_combinations = len([e for e in self.events if e.action_type == 'key_combination'])
         text_inputs = len([e for e in self.events if e.action_type == 'text_input'])
         scrolls = len([e for e in self.events if 'scroll' in e.action_type])
         
@@ -676,7 +731,8 @@ Images Captured: {len(self.events) * 5}
 
 Event Breakdown:
 - Mouse clicks: {mouse_clicks}
-- Key presses: {key_presses}  
+- Key presses: {key_presses}
+- Key combinations: {key_combinations}
 - Text inputs: {text_inputs}
 - Scroll events: {scrolls}
 
